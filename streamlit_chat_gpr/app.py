@@ -1,26 +1,103 @@
 import streamlit as st
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+from datetime import datetime
+import uuid
 
-st.set_page_config(page_title="Deep Chat", page_icon="💬")
-st.title("💬 Mon Deep Learning Chat")
+load_dotenv()
 
-# Initialisation de l'historique
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+client = OpenAI (
+    api_key = os.getenv("GROQ_API_KEY"),
+    base_url= os.getenv("GROQ_API_URL")
+)
 
-# Affichage des messages
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+if "conversations" not in st.session_state:
+    st.session_state.conversations = {}
 
-# Zone d'entrée
-if prompt := st.chat_input("Écris ton message ici ..."):
-    # Afficher le message utilisateur
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+if "current_conv_id" not in st.session_state:
+    st.session_state.current_conv_id = None
+
+
+st.set_page_config(page_title="Artificiel Education", page_icon="💬")
+st.title("💬 Artificiel Education")
+st.markdown("Pose une question sur un sujet scolaire et reçois une explication claire !")
+
+
+def create_new_conversation():
+    conv_id = str(uuid.uuid4())
+    st.session_state.conversations[conv_id] = [
+        {"role": "system", "content": "Tu es un assistant pédagogique, clair et simple."}
+    ]
+    st.session_state.current_conv_id = conv_id
+
+
+def delete_conversation():
+    current_id = st.session_state.current_conv_id
+    if current_id in st.session_state.conversations:
+        del st.session_state.conversations[current_id]
+        st.session_state.current_conv_id = None
+        st.rerun()
+
+# --- Sidebar : gestion des conversations ---
+st.sidebar.title("📚 Conversations")
+
+for conv_id in list(st.session_state.conversations):
+    messages = st.session_state.conversations[conv_id]
+    label = messages[1]["content"][:30]+"..." if len(messages) > 1 else "Nouvelle conversation"
+    if st.sidebar.button(label, key=f"select_{conv_id}"):
+        st.session_state.current_conv_id = conv_id
+
+
+st.sidebar.markdown("---")
+if st.sidebar.button("➕ Nouvelle conversation"):
+    create_new_conversation()
+    st.rerun()
+
+if st.session_state.current_conv_id and st.sidebar.button("🗑️ Supprimer cette conversation"):
+    delete_conversation()
+
+conv_id = st.session_state.current_conv_id
+
+prompt = st.chat_input("Écris ton message ici ...")
+
+# Affichage et gestion de la conversation sélectionnée 
+if prompt and not conv_id:
+    create_new_conversation()
+    conv_id = st.session_state.current_conv_id
+
+if conv_id:
+    messages = st.session_state.conversations[conv_id]
+
+    # Affichage des messages
+    for msg in messages[1:]:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    # Zone d'entrée
+    if prompt:
+        # Afficher le message utilisateur
+        messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
  # Générer une réponse simulée
-    response = f"🤖 Réponse de GPR : '{prompt[::-1]}'"  # Réponse inversée pour l'exemple
-    st.session_state.messages.append({"role": "assistant", "content": response})
-    with st.chat_message("assistant"):
-        st.markdown(response)
+    # response = f"🤖 Réponse de GPR : '{prompt[::-1]}'"  # Réponse inversée pour l'exemple
+    # st.session_state.messages.append({"role": "assistant", "content": response})
+    # with st.chat_message("assistant"):
+    #     st.markdown(response)
+        with st.chat_message("assistant"):
+            with st.spinner("🤖 Réflexion ..."):
+                try: 
+                    response = client.chat.completions.create(
+                        model = "llama3-70b-8192",
+                        messages = messages,
+                        temperature = 0.6,
+                        max_tokens = 800
+                    )
+                    reply = response.choices[0].message.content
+                except Exception as e :
+                    reply = f"❌ Erreur : {e}"
+            
+            st.markdown(reply)
+            messages.append({"role": "assistant", "content": reply})
