@@ -1,8 +1,9 @@
 # Streeamlit-LLM
-# créer environnement virtuel python pour le projet
+# Créer environnement virtuel python pour le projet
 cd streamlit_chat_gpr
 python -m venv venv
-source venv/bin/activate # Pour mac # ou venv\Scripts\activate sur Windows
+source venv/bin/activate # Pour mac # 
+ou venv\Scripts\activate sur Windows
 
 # Installer les packages nécessaire au projet
 pip install -r requirements.txt
