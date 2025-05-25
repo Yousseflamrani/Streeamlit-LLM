@@ -12,18 +12,17 @@ client = OpenAI (
     base_url= os.getenv("GROQ_API_URL")
 )
 
+st.set_page_config(page_title="Artificiel Education", page_icon="💬")
+st.title("💬 Artificiel Education")
+st.markdown("Pose une question sur un sujet scolaire et reçois une explication claire !")
+
 if "conversations" not in st.session_state:
     st.session_state.conversations = {}
 
 if "current_conv_id" not in st.session_state:
     st.session_state.current_conv_id = None
 
-
-st.set_page_config(page_title="Artificiel Education", page_icon="💬")
-st.title("💬 Artificiel Education")
-st.markdown("Pose une question sur un sujet scolaire et reçois une explication claire !")
-
-
+#--- Fonctions ---
 def create_new_conversation():
     conv_id = str(uuid.uuid4())
     st.session_state.conversations[conv_id] = [
@@ -34,17 +33,23 @@ def create_new_conversation():
 
 def delete_conversation():
     current_id = st.session_state.current_conv_id
-    if current_id in st.session_state.conversations:
-        del st.session_state.conversations[current_id]
+    if current_id:
+        st.session_state.conversations.pop(current_id, None)
         st.session_state.current_conv_id = None
         st.rerun()
+
+def get_label(messages):
+    if len(messages) > 1:
+        return messages[1]["content"][:30] + "..."
+    return "Nouvelle conversation"
+
 
 # --- Sidebar : gestion des conversations ---
 st.sidebar.title("📚 Conversations")
 
 for conv_id in list(st.session_state.conversations):
     messages = st.session_state.conversations[conv_id]
-    label = messages[1]["content"][:30]+"..." if len(messages) > 1 else "Nouvelle conversation"
+    label = get_label(messages)
     if st.sidebar.button(label, key=f"select_{conv_id}"):
         st.session_state.current_conv_id = conv_id
 
