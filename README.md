@@ -16,3 +16,9 @@ pip install streamlit openai
 
 # Installer le package pour les variables d'environnement
 pip install python-dotenv
+
+# Installer le package pour tester les models
+pip install sentence-transformers
+
+# Démarer les tests de comparaison
+python compare_models.py

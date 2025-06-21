@@ -95,7 +95,10 @@ if conv_id:
             with st.spinner("🤖 Réflexion ..."):
                 try: 
                     response = client.chat.completions.create(
+                        # model méta
                         model = "llama3-70b-8192",
+                        # model google
+                        # model= "gemma2-9b-it",
                         messages = messages,
                         temperature = 0.6,
                         max_tokens = 800
