@@ -55,3 +55,11 @@ def list_conversations():
     return [row[0] for row in rows]
 
 
+def delete_conversation_from_db(conv_id):
+    conn = sqlite3.connect("conversations.db")
+    c = conn.cursor()
+    c.execute('''
+        DELETE FROM conversations WHERE conv_id = ?
+    ''', (conv_id,))
+    conn.commit()
+    conn.close()

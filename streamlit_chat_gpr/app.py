@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 import uuid
-from db import init_db, save_message_to_db, load_conversation, list_conversations
+from db import init_db, save_message_to_db, load_conversation, list_conversations, delete_conversation_from_db
 
 
 load_dotenv()
@@ -36,14 +36,17 @@ def create_new_conversation():
 
 def delete_conversation():
     current_id = st.session_state.current_conv_id
-    if current_id:
+    if current_id:     
+        delete_conversation_from_db(current_id)
         st.session_state.conversations.pop(current_id, None)
         st.session_state.current_conv_id = None
         st.rerun()
 
+
 def get_label(messages):
-    if len(messages) > 1:
-        return messages[1]["content"][:30] + "..."
+    for msg in messages:
+        if msg["role"] == "user":
+            return msg["content"][:30] + "..."
     return "Nouvelle conversation"
 
 
