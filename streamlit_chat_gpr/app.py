@@ -4,8 +4,11 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 import uuid
+from db import init_db, save_message_to_db, load_conversation, list_conversations
+
 
 load_dotenv()
+init_db()
 
 client = OpenAI (
     api_key = os.getenv("GROQ_API_KEY"),
@@ -47,11 +50,16 @@ def get_label(messages):
 # --- Sidebar : gestion des conversations ---
 st.sidebar.title("📚 Conversations")
 
-for conv_id in list(st.session_state.conversations):
-    messages = st.session_state.conversations[conv_id]
+
+for conv_id in list_conversations():
+   
+    messages = load_conversation(conv_id)
     label = get_label(messages)
     if st.sidebar.button(label, key=f"select_{conv_id}"):
         st.session_state.current_conv_id = conv_id
+        st.session_state.conversations[conv_id] = messages
+
+
 
 
 st.sidebar.markdown("---")
@@ -83,6 +91,7 @@ if conv_id:
     if prompt:
         # Afficher le message utilisateur
         messages.append({"role": "user", "content": prompt})
+        save_message_to_db(conv_id, "user", prompt)
         with st.chat_message("user"):
             st.markdown(prompt)
 
@@ -109,3 +118,4 @@ if conv_id:
             
             st.markdown(reply)
             messages.append({"role": "assistant", "content": reply})
+            save_message_to_db(conv_id, "assistant", reply)
