@@ -1,24 +1,43 @@
-# Streeamlit-LLM
-# Créer environnement virtuel python pour le projet
+# 🚀 Streamlit-LLM
+
+## 📋 Table des matières
+- [Installation](#installation)
+- [Démarrage du projet](#démarrage-du-projet)
+- [Tests et comparaison](#tests-et-comparaison)
+
+## 🛠️ Installation
+
+### 1. Créer l'environnement virtuel Python
+```bash
 cd streamlit_chat_gpr
 python -m venv venv
-source venv/bin/activate # Pour mac # 
-ou venv\Scripts\activate sur Windows
+```
 
-# Installer les packages nécessaire au projet
+### 2. Activer l'environnement virtuel
+```bash
+# Sur macOS/Linux
+source venv/bin/activate
+
+# Sur Windows
+venv\Scripts\activate
+```
+
+### 3. Installer les dépendances
+```bash
 pip install -r requirements.txt
+pip install streamlit openai python-dotenv sentence-transformers
+```
 
-# Démarer le projet
-streamlit run app.py 
+## 🚀 Démarrage du projet
+```bash
+streamlit run app.py
+```
 
-# Installer le model 
-pip install streamlit openai
+## 🧪 Tests et comparaison
+Pour tester et comparer les modèles :
+```bash
+python comparaison_models.py
+```
 
-# Installer le package pour les variables d'environnement
-pip install python-dotenv
-
-# Installer le package pour tester les models
-pip install sentence-transformers
-
-# Démarer les tests de comparaison
-python compare_models.py
+---
+*Projet développé avec Streamlit et OpenAI*
