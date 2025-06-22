@@ -14,7 +14,8 @@ API_URL = os.getenv("GROQ_API_URL")
 # Modèles à comparer
 MODELS = {
     "llama3" : "llama3-70b-8192",
-    "gemma2" : "gemma2-9b-it"
+    "gemma2" : "gemma2-9b-it",
+    "mixtral" : "mixtral-8x7b-32768"
 }
 
 # Questions d'évaluation
@@ -101,13 +102,35 @@ def main():
             })
             print(f"[{model_name}] Question : '{question[:30]}...' -> Similarité: {similarity:.3f}, Durée: {duration:.2f}s, Longueur: {word_count}")
     
+    # Affichage détaillé par question
+    print("\n=== Résultats détaillés par question ===")
+    for i, question in enumerate(QUESTIONS):
+        print(f"\n📚 Question {i+1}: {question}")
+        print(f"📖 Référence: {REFERENCES[i]}")
+        print("-" * 80)
+        
+        question_results = [r for r in results if r["Question"] == question]
+        
+        for result in question_results:
+            print(f"\n🤖 Modèle: {result['Modèle']}")
+            print(f"⚡ Durée: {result['Durée (s)']:.2f}s")
+            print(f"📏 Longueur: {result['Longueur (mots)']} mots")
+            print(f"🎯 Similarité: {result['Similarité']:.3f}")
+            print(f"📊 Score longueur: {result['Score longueur']:.3f}")
+            print(f"💬 Réponse: {result['Réponse'][:200]}...")
+        
+        # Meilleur modèle pour cette question
+        best_for_question = max(question_results, key=lambda x: x["Similarité"])
+        print(f"\n🏆 Meilleur pour cette question: {best_for_question['Modèle']} (Similarité: {best_for_question['Similarité']:.3f})")
+        print("=" * 80)
+
     # Analyse globale par modèle
     summary = {}
     for model_name in MODELS.keys():
-        filered = [r for r in results if r["Modèle"] == model_name]
-        avg_sim = np.mean([r["Similarité"] for r in filered])
-        avg_dur = np.mean([r["Durée (s)"] for r in filered])
-        avg_len = np.mean([r["Score longueur"] for r in filered])
+        filtered = [r for r in results if r["Modèle"] == model_name]
+        avg_sim = np.mean([r["Similarité"] for r in filtered])
+        avg_dur = np.mean([r["Durée (s)"] for r in filtered])
+        avg_len = np.mean([r["Score longueur"] for r in filtered])
 
         # Pondération personnalisée - modifie ici si besoin 
         score_global = avg_sim * 0.6 - avg_dur * 0.3 + avg_len * 0.1
@@ -116,16 +139,16 @@ def main():
             "Durée moyenne (s)": avg_dur,
             "Score longueur moyen": avg_len,
             "Score global": score_global
-    }
+        }
 
     print("\n=== Résumé final ===")
     for model, metrics in summary.items():
         print(f"\nModèle: {model}")
         for k, v in metrics.items():
-            print(f" {k}: {v:.3f}")
+            print(f"  {k}: {v:.3f}")
 
     meilleur = max(summary.items(), key=lambda x: x[1]["Score global"])
-    print(f"\n Meilleur modèle selon score global: {meilleur[0]} avec un score de {meilleur[1]['Score global']:.3f}")
+    print(f"\n🥇 Meilleur modèle selon score global: {meilleur[0]} avec un score de {meilleur[1]['Score global']:.3f}")
 
 if __name__ == "__main__":
     main()
