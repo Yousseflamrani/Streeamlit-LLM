@@ -1,9 +1,22 @@
 # 🚀 Streamlit-LLM
 
 ## 📋 Table des matières
+- [Pré-requis](#pré-requis)
 - [Installation](#installation)
 - [Démarrage du projet](#démarrage-du-projet)
 - [Tests et comparaison](#tests-et-comparaison)
+
+## ✅ Pré-requis
+
+Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
+
+- **Python 3.11.0** (version recommandée)
+- **pip** (installé avec Python)
+- **Git** (pour cloner le projet si nécessaire)
+- **Un terminal ou shell** (Command Prompt, PowerShell, Terminal, etc.)
+- Un compte sur [https://console.groq.com](https://console.groq.com) pour obtenir une clé API GROQ
+
+---
 
 ## 🛠️ Installation
 
@@ -28,7 +41,7 @@ pip install -r requirements.txt
 pip install streamlit openai python-dotenv sentence-transformers
 ```
 
-### 4. Configuration de l'API Gorq
+### 4. Configuration de l'API GORQ
 
 Pour interagir avec les modèles d'OpenAI, vous devez configurer une clé API :
 
