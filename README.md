@@ -11,9 +11,6 @@
 Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
 
 - **Python 3.11.0** (version recommandée)
-- **pip** (installé avec Python)
-- **Git** (pour cloner le projet si nécessaire)
-- **Un terminal ou shell** (Command Prompt, PowerShell, Terminal, etc.)
 - Un compte sur [https://console.groq.com](https://console.groq.com) pour obtenir une clé API GROQ
 
 ---
