@@ -33,7 +33,7 @@ pip install streamlit openai python-dotenv sentence-transformers
 Pour interagir avec les modèles d'OpenAI, vous devez configurer une clé API :
 
 4.1. Obtenir une clé API
-Rendez-vous sur https://console.groq.com/home pour créer une clé si vous n’en avez pas.
+Rendez-vous sur https://console.groq.com/keys pour créer une clé si vous n’en avez pas.
 
 4.2. Dans le répertoire streamlit_chat_gpr, éditez le fichier .env et remplacez la valeur de l'ancienne clé par la votre :
 ```python
