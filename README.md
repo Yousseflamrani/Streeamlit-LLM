@@ -46,7 +46,7 @@ python comparaison_models.py
 
 ##  collaborateurs
 
-### ALAOUI LE MRANI YOUSSEF
+### ALAOUI EL MRANI YOUSSEF
 ### Jong Hoa CHONG
 ### Tom BRUAIRE
 ### Maylis GAILLARD
