@@ -41,3 +41,13 @@ python comparaison_models.py
 
 ---
 *Projet développé avec Streamlit et OpenAI*
+
+---
+
+##  collaborateurs
+
+# ALAOUI LE MRANI YOUSSEF
+# Jong Hoa CHONG
+# Tom BRUAIRE
+# Maylis GAILLARD
+# Enolha DAIJARDIN
