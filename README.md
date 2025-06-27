@@ -28,6 +28,41 @@ pip install -r requirements.txt
 pip install streamlit openai python-dotenv sentence-transformers
 ```
 
+### 4. Configuration de l'API OpenAI
+
+Pour interagir avec les modèles d'OpenAI, vous devez configurer une clé API :
+
+1. Obtenir une clé API
+Rendez-vous sur https://platform.openai.com/account/api-keys pour créer une clé si vous n’en avez pas.
+
+2. Créer un fichier .env à la racine du projet
+Ajoutez la ligne suivante en remplaçant votre_clé_api par votre clé réelle :
+
+ini
+Copier
+Modifier
+OPENAI_API_KEY=votre_clé_api
+3. Vérifier que le fichier .env est bien chargé
+Assurez-vous que le code charge la clé via python-dotenv comme ceci (dans app.py ou autre) :
+```python
+import streamlit as st
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+from datetime import datetime
+import uuid
+from db import init_db, save_message_to_db, load_conversation, list_conversations, delete_conversation_from_db
+
+
+load_dotenv()
+init_db()
+
+client = OpenAI (
+    api_key = os.getenv("GROQ_API_KEY"),
+    base_url= os.getenv("GROQ_API_URL")
+)
+```
+
 ## 🚀 Démarrage du projet
 ```bash
 streamlit run app.py
