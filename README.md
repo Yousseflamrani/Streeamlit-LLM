@@ -28,21 +28,20 @@ pip install -r requirements.txt
 pip install streamlit openai python-dotenv sentence-transformers
 ```
 
-### 4. Configuration de l'API OpenAI
+### 4. Configuration de l'API Gorq
 
 Pour interagir avec les modèles d'OpenAI, vous devez configurer une clé API :
 
-1. Obtenir une clé API
-Rendez-vous sur https://platform.openai.com/account/api-keys pour créer une clé si vous n’en avez pas.
+4.1. Obtenir une clé API
+Rendez-vous sur https://console.groq.com/home pour créer une clé si vous n’en avez pas.
 
-2. Créer un fichier .env à la racine du projet
-Ajoutez la ligne suivante en remplaçant votre_clé_api par votre clé réelle :
+4.2. Dans le répertoire streamlit_chat_gpr, éditez le fichier .env et remplacez la valeur de l'ancienne clé par la votre :
+```python
+GROQ_API_KEY= "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"
+GROQ_API_URL="https://api.groq.com/openai/v1"
+```
 
-ini
-Copier
-Modifier
-OPENAI_API_KEY=votre_clé_api
-3. Vérifier que le fichier .env est bien chargé
+4.3. Vérifier que le fichier .env est bien chargé
 Assurez-vous que le code charge la clé via python-dotenv comme ceci (dans app.py ou autre) :
 ```python
 import streamlit as st
